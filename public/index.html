@@ -6,8 +6,58 @@
         <link rel="stylesheet" href="./css/style.css"/>
     </head>
     <body>
-        <button id="loginButton" name="loginButton" type="button">Login</button>
-        <button id="registerButton" name="registerButton" type="button">Register</button>
+       <div class="container">
+           <div class="row">
+               <div class="panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <a href="#" class="active" id="login-form-link">Login</a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a href="#" id="register-form-link">Register</a>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <form id="login-form" style="display: block;">
+                                    <div class="form-group">
+                                        <input type="text" id="userName" name="userName" placeholder="Enter username"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" id="password" name="password" placeholder="Enter password"/>    
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" name="login" id="login" class="btn btn-login">Log In</button>
+                                    </div>
+                                </form>
+                                <form id="register-form">
+                                    <div class="form-group">
+                                        <input type="text" id="registerUsername" name="registerUsername" placeholder="Username"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" id="registerEmail" name="registerEmail" placeholder="Email"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" id="regPasswd" name="regPasswd" placeholder="Enter password"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" id="confregPasswd" name="confregPasswd" placeholder="Confirm password"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" name="register" id="register" class="btn btn-login" onClick="registerAction();">Register</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+           </div>
+       </div>
     </body>
-    <script type="javascript" src="./js/app.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="./js/app.js"></script>
 </html>
