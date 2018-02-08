@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var {User} = require('./models/user');
 
 function connectToUserDb(){
     return new Promise((resolve, reject) => {
@@ -16,9 +17,26 @@ function connectToUserDb(){
 }
 
 function saveNewUserToDB(newUser){
+    var ux = new User({
+        username : newUser.username,
+        password : newUser.password,
+        email : newUser.email
+    });
+    return new Promise((resolve, reject) => {
+        ux.save((err, user, nrAffected) => {
+            if (err){
+                console.log('Could not save user.', err);
+                reject(err);
+            }else{
+                console.log('User Saved');
+                resolve(user);
+            }
+        });
+    });
     
 }
 
 module.exports = {
-    connectToUserDb : connectToUserDb
+    connectToUserDb : connectToUserDb,
+    saveNewUserToDB : saveNewUserToDB
 };

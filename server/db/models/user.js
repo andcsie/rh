@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var user = mongoose.Model('User', {
+var User = mongoose.model('users', {
    username : {
        type : String,
        required : true
@@ -16,5 +16,5 @@ var user = mongoose.Model('User', {
 });
 
 module.exports = {
-    user: user
+    User: User
 };

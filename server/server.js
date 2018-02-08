@@ -11,9 +11,12 @@ app.use(express.static(publicPath));
 app.use(bodyParser.json());
 
 app.post('/create', (req, rsp) => {
-    authutils.validateCreateAccountFields(req.body).then((result) => {
+    var userCredentials = req.body;
+    dbfunct.connectToUserDb().then(authutils.validateCreateAccountFields(userCredentials)
+                             .then(dbfunct.saveNewUserToDB((userCredentials))))
+                             .then((result) => {
         rsp.send(result);
-    }, (err) => {
+    }).catch((err) => {
         rsp.send(err);
     });
 });
