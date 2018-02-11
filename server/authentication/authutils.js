@@ -39,14 +39,11 @@ function passwordHash(account){
             reject();
         }else{
             var salt = generateRandomString();
-            console.log("SAlt------------------------------");
-            console.log(salt);
             var hashed = crypto.createHmac('sha512', salt);
             hashed.update(account.password);
             var valueHashed = hashed.digest('hex');
             result.password = valueHashed;
             result.salt = salt;
-            console.log(result);
             resolve(result);
         }
     });

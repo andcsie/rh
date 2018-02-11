@@ -26,6 +26,42 @@ function registerAction(){
     });
 }
 
+function loginUser(){
+    var username = $('#userName').val();
+    var password = $('#password').val();
+    var loginCredentials = {
+        username : username,
+        password : password
+    };
+
+    $.ajax({
+        url : '/login',
+        method : 'POST',
+        headers : {
+            "Content-Type":"application/json; charset=UTF-8"
+        },
+        data : JSON.stringify(loginCredentials),
+        success : function(result){
+            console.log(result);
+        },
+        error : function(err){
+            console.log(err);
+        }
+    });
+}
+
+function validateFieldsLogin(){
+    var username = $('#userName').val();
+    var password = $('#password').val();
+
+    if (username === "" || password === ""){
+        alert("Please provide credentials!");
+        return false;
+    }
+
+    return true;
+}
+
 function validateFieldsRegister(){
     var user = $('#registerUsername').val();
     var pass = $('#regPasswd').val();
@@ -51,4 +87,10 @@ $('#register').click(function(){
         registerAction();
     }
 });
-    
+
+$('#login').click(function(){
+    var lgn = validateFieldsLogin();
+    if (lgn !== false){
+        loginUser();
+    }
+});

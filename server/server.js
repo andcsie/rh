@@ -22,6 +22,11 @@ app.post('/create', (req, rsp) => {
     });
 });
 
+app.post('/login', (req, res) => {
+    var loginCredentials = req.body;
+    res.send(loginCredentials);
+});
+
 app.get('/', (req, resp) => {
     resp.render('index');
 });
