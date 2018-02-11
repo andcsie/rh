@@ -20,7 +20,8 @@ function saveNewUserToDB(newUser){
     var ux = new User({
         username : newUser.username,
         password : newUser.password,
-        email : newUser.email
+        email : newUser.email,
+        salt : newUser.salt
     });
     return new Promise((resolve, reject) => {
         ux.save((err, user, nrAffected) => {

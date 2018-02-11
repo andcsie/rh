@@ -12,6 +12,10 @@ var User = mongoose.model('users', {
    email : {
        type: String,
        required : true
+   },
+   salt :{ 
+       type : String,
+       required : true
    }
 });
 

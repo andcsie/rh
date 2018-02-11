@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 app.post('/create', (req, rsp) => {
     var userCredentials = req.body;
     dbfunct.connectToUserDb().then(authutils.validateCreateAccountFields(userCredentials)
+                             .then(authutils.passwordHash(userCredentials))
                              .then(dbfunct.saveNewUserToDB((userCredentials))))
                              .then((result) => {
         rsp.send(result);

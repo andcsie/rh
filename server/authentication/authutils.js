@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 function validateCreateAccountFields(account){
     var error = {};
     return new Promise((resolve, reject) => {
@@ -26,6 +28,32 @@ function validateCreateAccountFields(account){
     });
 }
 
+function generateRandomString(){
+    return crypto.randomBytes(16).toString('hex');
+}
+
+function passwordHash(account){
+    var result = account;
+    return new Promise((resolve, reject) => {
+        if (account.password === ""){
+            reject();
+        }else{
+            var salt = generateRandomString();
+            console.log("SAlt------------------------------");
+            console.log(salt);
+            var hashed = crypto.createHmac('sha512', salt);
+            hashed.update(account.password);
+            var valueHashed = hashed.digest('hex');
+            result.password = valueHashed;
+            result.salt = salt;
+            console.log(result);
+            resolve(result);
+        }
+    });
+}
+
 module.exports = {
-    validateCreateAccountFields : validateCreateAccountFields
+    validateCreateAccountFields : validateCreateAccountFields,
+    passwordHash : passwordHash,
+    generateRandomString : generateRandomString
 }
