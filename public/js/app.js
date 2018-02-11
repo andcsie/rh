@@ -25,4 +25,30 @@ function registerAction(){
         }
     });
 }
+
+function validateFieldsRegister(){
+    var user = $('#registerUsername').val();
+    var pass = $('#regPasswd').val();
+    var confPass = $('#confregPasswd').val();
+    var email = $('#registerEmail').val();
+
+    if (user === "" || pass === "" || confPass === "" || email === ""){
+        alert("All the fields should be completed!");
+        return false;
+    }
+
+    if (pass !== confPass){
+        alert("Passwords should match!");
+        return false;
+    }
+
+    return true;
+}
+
+$('#register').click(function(){
+    var bool = validateFieldsRegister();
+    if (bool !== false){
+        registerAction();
+    }
+});
     
