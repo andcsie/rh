@@ -37,7 +37,26 @@ function saveNewUserToDB(newUser){
     
 }
 
+function retrieveUserDetails(login){
+    var username = login.username;
+    return new Promise((resolve, reject) => {
+        User.find({
+            'username' : username
+        }, (err, doc) =>{
+            if (err){
+                console.log(err);
+                reject(err);
+            }else{
+                console.log("User found!");
+                resolve(doc);
+            }
+        });
+    });
+    
+}
+
 module.exports = {
     connectToUserDb : connectToUserDb,
-    saveNewUserToDB : saveNewUserToDB
+    saveNewUserToDB : saveNewUserToDB,
+    retrieveUserDetails : retrieveUserDetails
 };

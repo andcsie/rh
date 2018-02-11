@@ -1,5 +1,26 @@
 const crypto = require('crypto');
 
+function validateLoginAction(login){
+    var error = {};
+    return new Promise((resolve, reject) => {
+        if (!login.hasOwnProperty('username')){
+            error = {
+                errorCode : 1,
+                errorDesc : "The login should contain username!"
+            };
+            reject(error);
+        }
+        if (!login.hasOwnProperty('password')){
+            error = {
+                errorCode : 2,
+                errorDesc : "The login should contain password!"
+            };
+            reject(error);
+        }
+        resolve(login);
+    });
+}
+
 function validateCreateAccountFields(account){
     var error = {};
     return new Promise((resolve, reject) => {
@@ -52,5 +73,6 @@ function passwordHash(account){
 module.exports = {
     validateCreateAccountFields : validateCreateAccountFields,
     passwordHash : passwordHash,
-    generateRandomString : generateRandomString
+    generateRandomString : generateRandomString,
+    validateLoginAction : validateLoginAction
 }

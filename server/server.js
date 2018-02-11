@@ -24,7 +24,13 @@ app.post('/create', (req, rsp) => {
 
 app.post('/login', (req, res) => {
     var loginCredentials = req.body;
-    res.send(loginCredentials);
+    dbfunct.connectToUserDb().then(authutils.validateLoginAction(loginCredentials))
+                             .then(dbfunct.retrieveUserDetails(loginCredentials))
+                             .then((result)=> {
+        res.send(result);
+    }).catch((err) => {
+        res.send(err);
+    });
 });
 
 app.get('/', (req, resp) => {
