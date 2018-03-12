@@ -1,3 +1,4 @@
+
 var express = require('express');
 const path = require('path');
 const authutils = require('./authentication/authutils');
@@ -23,13 +24,20 @@ app.post('/create', (req, rsp) => {
 });
 
 app.post('/login', (req, res) => {
-    var loginCredentials = req.body;
-    dbfunct.connectToUserDb().then(authutils.validateLoginAction(loginCredentials))
-                             .then(dbfunct.retrieveUserDetails(loginCredentials))
-                             .then((result)=> {
-        res.send(result);
-    }).catch((err) => {
-        res.send(err);
+    var loginCredentiaDials = req.body;
+    dbfunct.connectToUserDb();
+    dbfunct.retrieveUserDetails(loginCredentiaDials).then((result) =>{
+        let dbObject = Object.assign({}, result);
+        authutils.validateCredentials(dbObject[0], loginCredentiaDials.password).then((validateResult) => {
+            console.log("Login validated");
+            res.send("Login Succesful!");
+        }).catch((validationError) => {
+            console.log("Validation Error!");
+            res.send("Incorrect password!");
+        });
+    }).catch((error) => {
+        console.log("Retrieval error");
+        res.send("User not found");
     });
 });
 

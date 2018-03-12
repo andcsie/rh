@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 
 function validateLoginAction(login){
+    var result = login;
     var error = {};
     return new Promise((resolve, reject) => {
         if (!login.hasOwnProperty('username')){
@@ -17,7 +18,7 @@ function validateLoginAction(login){
             };
             reject(error);
         }
-        resolve(login);
+        resolve(result);
     });
 }
 
@@ -57,7 +58,7 @@ function passwordHash(account){
     var result = account;
     return new Promise((resolve, reject) => {
         if (account.password === ""){
-            reject();
+            return reject();
         }else{
             var salt = generateRandomString();
             var hashed = crypto.createHmac('sha512', salt);
@@ -65,8 +66,22 @@ function passwordHash(account){
             var valueHashed = hashed.digest('hex');
             result.password = valueHashed;
             result.salt = salt;
-            resolve(result);
+            return resolve(result);
         }
+    });
+}
+
+function validateCredentials(userLogin, password){
+    console.log("[validate login credentials]");
+    var result = Object.assign({}, userLogin);
+    var salt = userLogin.salt;
+    return new Promise((resolve, reject) => {
+        var hasedPwd = crypto.createHmac('sha512', salt).update(password).digest('hex');
+        if (hasedPwd === userLogin.password){
+            resolve(result);
+        }else{
+            reject(hexHash);
+        }  
     });
 }
 
@@ -74,5 +89,6 @@ module.exports = {
     validateCreateAccountFields : validateCreateAccountFields,
     passwordHash : passwordHash,
     generateRandomString : generateRandomString,
-    validateLoginAction : validateLoginAction
+    validateLoginAction : validateLoginAction,
+    validateCredentials : validateCredentials
 }
