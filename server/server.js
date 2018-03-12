@@ -13,31 +13,55 @@ app.use(bodyParser.json());
 
 app.post('/create', (req, rsp) => {
     var userCredentials = req.body;
-    dbfunct.connectToUserDb().then(authutils.validateCreateAccountFields(userCredentials)
-                             .then(authutils.passwordHash(userCredentials))
-                             .then(dbfunct.saveNewUserToDB((userCredentials))))
-                             .then((result) => {
-        rsp.send(result);
-    }).catch((err) => {
-        rsp.send(err);
+    dbfunct.connectToUserDb().then(() => {
+        dbfunct.retrieveUserDetails(userCredentials).then((result) => {
+            if (Object.keys(result).length === 0){
+                authutils.validateCreateAccountFields(userCredentials).then(() => {
+                    authutils.passwordHash(userCredentials).then(() => {
+                        dbfunct.saveNewUserToDB(userCredentials).then((user) => {
+                            rsp.send(user);
+                        }).catch((saveError) => {
+                            console.log("Error in saving user!");
+                        })
+                    }).catch((hashError) => {
+                        console.log("Error while hashing!");
+                    });
+                }).catch((validationError) => {
+                    console.log("Error in validation!");
+                    rsp.send(validationError);
+                });
+            }else{
+                rsp.send("User already defined!");
+            }
+        }).catch((retrieveError) => {
+            console.log(retrieveError);
+            console.log("Error in retriving from DB!");
+        });
+    }).catch((connectionError) => {
+        console.log("Unable to connect to database!");
+        rsp.send(connectionError);
     });
 });
 
 app.post('/login', (req, res) => {
     var loginCredentiaDials = req.body;
-    dbfunct.connectToUserDb();
-    dbfunct.retrieveUserDetails(loginCredentiaDials).then((result) =>{
-        let dbObject = Object.assign({}, result);
-        authutils.validateCredentials(dbObject[0], loginCredentiaDials.password).then((validateResult) => {
-            console.log("Login validated");
-            res.send("Login Succesful!");
-        }).catch((validationError) => {
-            console.log("Validation Error!");
-            res.send("Incorrect password!");
+    dbfunct.connectToUserDb().then(() => {
+        dbfunct.retrieveUserDetails(loginCredentiaDials).then((result) =>{
+            let dbObject = Object.assign({}, result);
+            authutils.validateCredentials(dbObject[0], loginCredentiaDials.password).then((validateResult) => {
+                console.log("Login validated");
+                res.send("Login Succesful!");
+            }).catch((validationError) => {
+                console.log("Validation Error!");
+                res.send("Incorrect password!");
+            });
+        }).catch((error) => {
+            console.log("Retrieval error");
+            res.send("User not found");
         });
-    }).catch((error) => {
-        console.log("Retrieval error");
-        res.send("User not found");
+    }).catch((dbconnErr) => {
+        console.log("Error while connecting to DB");
+        res.send(dbconnErr);
     });
 });
 

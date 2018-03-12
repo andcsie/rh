@@ -38,6 +38,7 @@ function saveNewUserToDB(newUser){
 }
 
 function retrieveUserDetails(login){
+    console.log("[retriveUSerDetails]");
     var username = login.username;
     return new Promise((resolve, reject) => {
         User.find({
